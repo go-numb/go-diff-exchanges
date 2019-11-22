@@ -200,19 +200,7 @@ func (p *E) set(b []byte) error {
 
 	var trade bitfinex.Trade
 	switch isUpdate {
-	// case "te": // Execution（処理済み、精査未満
-	// 	b, _, _, err := jsonparser.Get(b, "[2]")
-	// 	if err != nil {
-	// 		return err
-	// 	}
-	// 	var f []float64
-	// 	json.Unmarshal(b, &f)
-	// 	trade.ID = int64(f[0])
-	// 	trade.MTS = int64(f[1])
-	// 	trade.Amount = f[2]
-	// 	trade.Price = f[3]
-
-	case "tu": // Update（確定情報
+	case "te": // Execution（処理済み、精査未満
 		b, _, _, err := jsonparser.Get(b, "[2]")
 		if err != nil {
 			return err
@@ -223,6 +211,18 @@ func (p *E) set(b []byte) error {
 		trade.MTS = int64(f[1])
 		trade.Amount = f[2]
 		trade.Price = f[3]
+
+	// case "tu": // Update（確定情報
+	// 	b, _, _, err := jsonparser.Get(b, "[2]")
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// 	var f []float64
+	// 	json.Unmarshal(b, &f)
+	// 	trade.ID = int64(f[0])
+	// 	trade.MTS = int64(f[1])
+	// 	trade.Amount = f[2]
+	// 	trade.Price = f[3]
 
 	default: // case "hb":
 		// heartbeat/5sec
