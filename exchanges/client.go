@@ -94,8 +94,8 @@ func New(log *logrus.Logger) *Client {
 
 	inf, err := infv2.NewHTTPClient(infv2.HTTPConfig{
 		Addr:     "http://localhost:8086",
-		Username: "",
-		Password: "",
+		Username: "admin",
+		Password: "admin",
 	})
 	if err != nil {
 		log.Fatal(err)
