@@ -5,8 +5,6 @@ import (
 	"sync"
 	"time"
 
-	coin "github.com/go-numb/go-gmocoin"
-
 	"gonum.org/v1/gonum/stat"
 
 	"github.com/json-iterator/go"
@@ -197,9 +195,12 @@ func (p *E) isThere() bool {
 
 // Execution is gmoExecutionを内包したwebsocket用struct
 type Execution struct {
-	coin.Execution
-	Channel string `json:"channel"`
-	Symbol  string `json:"symbol"`
+	Price     float64   `json:"price,string"`
+	Side      string    `json:"side"`
+	Size      float64   `json:"size,string"`
+	Timestamp time.Time `json:"timestamp"`
+	Channel   string    `json:"channel"`
+	Symbol    string    `json:"symbol"`
 }
 
 func (p *E) set(data []byte) error {
