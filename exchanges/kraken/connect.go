@@ -161,12 +161,6 @@ func (p *Client) Reset() {
 }
 
 // LTP is 直近価格の出来高加重平均価格・出来高を取得
-<<<<<<< HEAD
-func (p Client) LTP() (ltp, volume float64) {
-	prices := make([]float64, len(p.E.Executions))
-	volumes := make([]float64, len(p.E.Executions))
-	for i, e := range p.E.Executions {
-=======
 func (p *Client) LTP() (ltp, volume float64) {
 	p.E.mux.Lock()
 	defer p.E.mux.Unlock()
@@ -174,7 +168,6 @@ func (p *Client) LTP() (ltp, volume float64) {
 	prices := make([]float64, len(use))
 	volumes := make([]float64, len(use))
 	for i, e := range use {
->>>>>>> Refactoring because an abnormal price was noticeable when price changed suddenly. Add IsZeroCheck
 		prices[i] = e.Price
 		volumes[i] = e.Size
 		volume += e.Size
