@@ -6,26 +6,30 @@ This program gets price by each exchanges websocket, and insert influxDB.
 [FTX Global Volume Monitor](https://ftx.com/volume-monitor)
 
 ### in Japan
-Bitflyer 
-Bitbank  
-Coincheck 
-Gmo
+- [x] Bitflyer  
+- [x] Bitbank  
+- [x] Coincheck  
+- [x] Gmo  
 
 ### outside
-Liquid  
-Huobi
-Okex 
-Ftx  
+- [x] Liquid
+- [x] Huobi
+- [x] Okex
+- [x] Ftx  
 
-Binance 
-Bitmex 
-HitBit 
+- [x] Binance
+- [x] Bitmex
+- [x] HitBit 
 
-Bitfinex
-Coinbase
-Kraken 
-ZB     
-Bithumb 
+- [x] Bitfinex
+- [x] Coinbase
+- [x] Kraken
+- [x] ZB 
+- [x] Bithumb
+
+### not include
+- [] Deribit
+- [] CME
 
 # Usage
 error when disconnect influxDB. 
