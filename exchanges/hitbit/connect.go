@@ -25,8 +25,6 @@ var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 // Client is structure
 type Client struct {
-	mux sync.Mutex
-
 	E      *E
 	Logger *logrus.Entry
 }
@@ -50,14 +48,9 @@ func (p *Client) Close() error {
 
 // E get executions
 type E struct {
+	mux        sync.Mutex
 	Executions []Execution
 	ServerTime time.Time
-}
-
-// Response struct
-type Response struct {
-	Table string        `json:"table"`
-	Data  [][]Execution `json:"data"`
 }
 
 // Execution is trades
@@ -139,8 +132,8 @@ func (p *Client) Connect() {
 // Reset is 約定配列のリセット
 // 各取引所同時にn秒足などをつくる際に活用
 func (p *Client) Reset() {
-	p.mux.Lock()
-	defer p.mux.Unlock()
+	p.E.mux.Lock()
+	defer p.E.mux.Unlock()
 	if !p.E.isThere() {
 		return
 	}
@@ -148,10 +141,20 @@ func (p *Client) Reset() {
 }
 
 // LTP is 直近価格の出来高加重平均価格・出来高を取得
+<<<<<<< HEAD
 func (p Client) LTP() (ltp, volume float64) {
 	prices := make([]float64, len(p.E.Executions))
 	volumes := make([]float64, len(p.E.Executions))
 	for i, e := range p.E.Executions {
+=======
+func (p *Client) LTP() (ltp, volume float64) {
+	p.E.mux.Lock()
+	defer p.E.mux.Unlock()
+	use := p.E.Executions
+	prices := make([]float64, len(use))
+	volumes := make([]float64, len(use))
+	for i, e := range use {
+>>>>>>> Refactoring because an abnormal price was noticeable when price changed suddenly. Add IsZeroCheck
 		prices[i] = e.Price
 		volumes[i] = e.Quantity
 		volume += e.Quantity

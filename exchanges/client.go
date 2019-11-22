@@ -242,6 +242,9 @@ func (p *Client) save(name string, e Exchange) {
 	}
 
 	ltp, vol := e.LTP()
+	if math.IsNaN(ltp) {
+		return
+	}
 	point, err := infv2.NewPoint(
 		name,
 		map[string]string{
