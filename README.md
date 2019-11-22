@@ -28,8 +28,8 @@ This program gets price by each exchanges websocket, and insert influxDB.
 - [x] Bithumb
 
 ### not include
-- [] Deribit
-- [] CME
+- [ ] Deribit
+- [ ] CME
 
 # Usage
 error when disconnect influxDB. 
