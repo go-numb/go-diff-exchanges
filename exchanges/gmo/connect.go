@@ -56,6 +56,16 @@ type E struct {
 	ServerTime time.Time
 }
 
+// Execution is gmoExecutionを内包したwebsocket用struct
+type Execution struct {
+	Price     float64   `json:"price,string"`
+	Side      string    `json:"side"`
+	Size      float64   `json:"size,string"`
+	Timestamp time.Time `json:"timestamp"`
+	Channel   string    `json:"channel"`
+	Symbol    string    `json:"symbol"`
+}
+
 // Request is json writer
 type Request struct {
 	Command string `json:"command"`
@@ -148,13 +158,10 @@ func (p *Client) Reset() {
 }
 
 // LTP is 直近価格の出来高加重平均価格・出来高を取得
-func (p *Client) LTP() (ltp, volume float64) {
-	p.mux.Lock()
-	defer p.mux.Unlock()
-	use := p.E.Executions
-	prices := make([]float64, len(use))
-	volumes := make([]float64, len(use))
-	for i, e := range use {
+func (p Client) LTP() (ltp, volume float64) {
+	prices := make([]float64, len(p.E.Executions))
+	volumes := make([]float64, len(p.E.Executions))
+	for i, e := range p.E.Executions {
 		prices[i] = e.Price
 		volumes[i] = e.Size
 		volume += e.Size
@@ -191,16 +198,6 @@ func (p *E) isThere() bool {
 		return false
 	}
 	return true
-}
-
-// Execution is gmoExecutionを内包したwebsocket用struct
-type Execution struct {
-	Price     float64   `json:"price,string"`
-	Side      string    `json:"side"`
-	Size      float64   `json:"size,string"`
-	Timestamp time.Time `json:"timestamp"`
-	Channel   string    `json:"channel"`
-	Symbol    string    `json:"symbol"`
 }
 
 func (p *E) set(data []byte) error {

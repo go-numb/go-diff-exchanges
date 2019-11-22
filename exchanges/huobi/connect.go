@@ -59,12 +59,6 @@ type E struct {
 	ServerTime time.Time
 }
 
-// Response struct
-type Response struct {
-	Table string        `json:"table"`
-	Data  [][]Execution `json:"data"`
-}
-
 // Execution is trades
 type Execution struct {
 	ID        big.Int `json:"id"`
@@ -150,13 +144,10 @@ func (p *Client) Reset() {
 }
 
 // LTP is 直近価格の出来高加重平均価格・出来高を取得
-func (p *Client) LTP() (ltp, volume float64) {
-	p.mux.Lock()
-	defer p.mux.Unlock()
-	use := p.E.Executions
-	prices := make([]float64, len(use))
-	volumes := make([]float64, len(use))
-	for i, e := range use {
+func (p Client) LTP() (ltp, volume float64) {
+	prices := make([]float64, len(p.E.Executions))
+	volumes := make([]float64, len(p.E.Executions))
+	for i, e := range p.E.Executions {
 		prices[i] = e.Price
 		volumes[i] = e.Amount
 		volume += e.Amount
