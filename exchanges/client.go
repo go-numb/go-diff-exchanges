@@ -182,7 +182,15 @@ func (p *Client) Connect() {
 		Reconnect:
 			p.Logger.Infof("start connect websocket to %s", name)
 			exchange.Connect()
-			time.Sleep(WSRECONNECTWAIT)
+			if name != "bitflyer" {
+				time.Sleep(WSRECONNECTWAIT)
+			} else {
+				if time.Now().UTC().Hour() != 19 {
+					time.Sleep(WSRECONNECTWAIT)
+				} else { // JTC4時定期メンテ
+					time.Sleep(12 * time.Minute)
+				}
+			}
 			p.Logger.Errorf("stop connect websocket at %s", name)
 			goto Reconnect
 		})
