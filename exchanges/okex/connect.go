@@ -80,7 +80,8 @@ type Request struct {
 func (p *Client) Connect() {
 	conn, _, err := websocket.DefaultDialer.Dial("wss://real.okex.com:8443/ws/v3", nil)
 	if err != nil {
-		p.Logger.Fatal(err)
+		p.Logger.Error(err)
+return
 	}
 	defer conn.Close()
 
@@ -90,7 +91,8 @@ func (p *Client) Connect() {
 			Op:   "subscribe",
 			Args: []string{channel},
 		}); err != nil {
-			p.Logger.Fatal(err)
+			p.Logger.Error(err)
+return
 		}
 	}
 

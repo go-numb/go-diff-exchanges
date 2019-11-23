@@ -79,7 +79,8 @@ type Request struct {
 func (p *Client) Connect() {
 	conn, _, err := websocket.DefaultDialer.Dial("wss://ftx.com/ws/", nil)
 	if err != nil {
-		p.Logger.Fatal(err)
+		p.Logger.Error(err)
+return
 	}
 	defer conn.Close()
 
@@ -92,7 +93,8 @@ func (p *Client) Connect() {
 				Channel: channel,
 				Market:  symbol,
 			}); err != nil {
-				p.Logger.Fatal(err)
+				p.Logger.Error(err)
+return
 			}
 		}
 	}

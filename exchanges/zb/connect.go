@@ -74,7 +74,8 @@ type Request struct {
 func (p *Client) Connect() {
 	conn, _, err := websocket.DefaultDialer.Dial("wss://api.zb.plus/websocket", nil)
 	if err != nil {
-		p.Logger.Fatal(err)
+		p.Logger.Error(err)
+return
 	}
 	defer conn.Close()
 
@@ -86,7 +87,8 @@ func (p *Client) Connect() {
 				Event:   "addChannel",
 				Channel: fmt.Sprintf(channel, symbol),
 			}); err != nil {
-				p.Logger.Fatal(err)
+				p.Logger.Error(err)
+return
 			}
 		}
 	}

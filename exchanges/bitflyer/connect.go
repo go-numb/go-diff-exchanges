@@ -59,7 +59,8 @@ type E struct {
 func (p *Client) Connect() {
 	conn, _, err := websocket.DefaultDialer.Dial("wss://ws.lightstream.bitflyer.com/json-rpc", nil)
 	if err != nil {
-		p.Logger.Fatal(err)
+		p.Logger.Error(err)
+return
 	}
 	defer conn.Close()
 
@@ -71,7 +72,8 @@ func (p *Client) Connect() {
 				`{"method": "subscribe", "params": {"channel": "%s"}}`,
 				channel)),
 		); err != nil {
-			p.Logger.Fatal(err)
+			p.Logger.Error(err)
+return
 		}
 	}
 

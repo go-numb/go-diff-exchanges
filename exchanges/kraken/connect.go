@@ -81,7 +81,8 @@ type Request struct {
 func (p *Client) Connect() {
 	conn, _, err := websocket.DefaultDialer.Dial("wss://ws.kraken.com", nil)
 	if err != nil {
-		p.Logger.Fatal(err)
+		p.Logger.Error(err)
+		return
 	}
 	defer conn.Close()
 
@@ -95,7 +96,8 @@ func (p *Client) Connect() {
 				"name": channel,
 			},
 		}); err != nil {
-			p.Logger.Fatal(err)
+			p.Logger.Error(err)
+			return
 		}
 	}
 

@@ -78,7 +78,8 @@ type Request struct {
 func (p *Client) Connect() {
 	conn, _, err := websocket.DefaultDialer.Dial("wss://api.huobi.pro/ws", nil)
 	if err != nil {
-		p.Logger.Fatal(err)
+		p.Logger.Error(err)
+return
 	}
 	defer conn.Close()
 
@@ -90,7 +91,8 @@ func (p *Client) Connect() {
 				Sub: fmt.Sprintf(channel, symbol),
 				ID:  fmt.Sprintf("id:%d", time.Now().Unix()),
 			}); err != nil {
-				p.Logger.Fatal(err)
+				p.Logger.Error(err)
+return
 			}
 		}
 	}

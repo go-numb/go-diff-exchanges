@@ -81,7 +81,8 @@ type Request struct {
 func (p *Client) Connect() {
 	conn, _, err := websocket.DefaultDialer.Dial("wss://ws-feed.pro.coinbase.com", nil)
 	if err != nil {
-		p.Logger.Fatal(err)
+		p.Logger.Error(err)
+return
 	}
 	defer conn.Close()
 
@@ -94,7 +95,8 @@ func (p *Client) Connect() {
 				ProductIDs: []string{symbol},
 				Channels:   []string{channel},
 			}); err != nil {
-				p.Logger.Fatal(err)
+				p.Logger.Error(err)
+return
 			}
 		}
 	}

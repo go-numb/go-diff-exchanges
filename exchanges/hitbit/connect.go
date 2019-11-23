@@ -73,11 +73,12 @@ type Request struct {
 func (p *Client) Connect() {
 	conn, _, err := websocket.DefaultDialer.Dial("wss://api.hitbtc.com/api/2/ws", nil)
 	if err != nil {
-		p.Logger.Fatal(err)
+		p.Logger.Error(err)
+		return
 	}
 	defer conn.Close()
 
-	channels := []string{"getTrades"}
+	channels := []string{"subscribeTrades"}
 	symbols := []string{"BTCUSD"}
 	for _, channel := range channels {
 		for _, symbol := range symbols {
@@ -85,13 +86,14 @@ func (p *Client) Connect() {
 				Method: channel,
 				Params: map[string]interface{}{
 					"symbol": symbol,
-					"limit":  3,
-					"sort":   "DESC",
-					"by":     "id",
+					// "limit":  3,
+					// "sort":   "DESC",
+					// "by":     "id",
 				},
 				ID: int(time.Now().UTC().Unix()),
 			}); err != nil {
-				p.Logger.Fatal(err)
+				p.Logger.Error(err)
+				return
 			}
 		}
 	}
@@ -187,7 +189,7 @@ func (p *E) isThere() bool {
 }
 
 func (p *E) set(b []byte) error {
-	data, _, _, err := jsonparser.Get(b, "result", "data")
+	data, _, _, err := jsonparser.Get(b, "params", "data")
 	if err != nil {
 		return err
 	}

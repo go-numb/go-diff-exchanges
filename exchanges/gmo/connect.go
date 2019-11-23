@@ -76,7 +76,8 @@ type Request struct {
 func (p *Client) Connect() {
 	conn, _, err := websocket.DefaultDialer.Dial("wss://api.coin.z.com/ws/public/v1", nil)
 	if err != nil {
-		p.Logger.Fatal(err)
+		p.Logger.Error(err)
+		return
 	}
 	defer conn.Close()
 
@@ -92,7 +93,8 @@ func (p *Client) Connect() {
 					Symbol:  symbol,
 				},
 			); err != nil {
-				p.Logger.Fatal(err)
+				p.Logger.Error(err)
+				return
 			}
 			time.Sleep(time.Second)
 		}

@@ -68,7 +68,8 @@ type Request struct {
 func (p *Client) Connect() {
 	conn, _, err := websocket.DefaultDialer.Dial("wss://www.bitmex.com/realtime", nil)
 	if err != nil {
-		p.Logger.Fatal(err)
+		p.Logger.Error(err)
+return
 	}
 	defer conn.Close()
 
@@ -78,7 +79,8 @@ func (p *Client) Connect() {
 			Op:   "subscribe",
 			Args: []string{channel},
 		}); err != nil {
-			p.Logger.Fatal(err)
+			p.Logger.Error(err)
+return
 		}
 	}
 

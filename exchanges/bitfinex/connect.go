@@ -71,7 +71,8 @@ type Request struct {
 func (p *Client) Connect() {
 	conn, _, err := websocket.DefaultDialer.Dial("wss://api-pub.bitfinex.com/ws/2", nil)
 	if err != nil {
-		p.Logger.Fatal(err)
+		p.Logger.Error(err)
+return
 	}
 	defer conn.Close()
 
@@ -84,7 +85,8 @@ func (p *Client) Connect() {
 				Channel: channel,
 				Symbol:  symbol,
 			}); err != nil {
-				p.Logger.Fatal(err)
+				p.Logger.Error(err)
+return
 			}
 		}
 	}

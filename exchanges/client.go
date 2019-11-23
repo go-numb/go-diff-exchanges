@@ -230,7 +230,8 @@ func (p *Client) Connect() {
 	})
 
 	if err := eg.Wait(); err != nil {
-		p.Logger.Fatal(err)
+		p.Logger.Error(err)
+		return
 	}
 
 }

@@ -81,7 +81,8 @@ type Request struct {
 func (p *Client) Connect() {
 	conn, _, err := websocket.DefaultDialer.Dial("wss://global-api.bithumb.pro/message/realtime", nil)
 	if err != nil {
-		p.Logger.Fatal(err)
+		p.Logger.Error(err)
+return
 	}
 	defer conn.Close()
 
@@ -98,7 +99,8 @@ func (p *Client) Connect() {
 		Command: "subscribe",
 		Args:    args,
 	}); err != nil {
-		p.Logger.Fatal(err)
+		p.Logger.Error(err)
+return
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
