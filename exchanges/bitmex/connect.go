@@ -23,7 +23,7 @@ const (
 	WSREADDEADLINE = 5 * time.Minute
 
 	// WSPINGTIMER PING確認
-	WSPINGTIMER = 25 * time.Second
+	WSPINGTIMER = 20 * time.Second
 )
 
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
@@ -69,7 +69,7 @@ func (p *Client) Connect() {
 	conn, _, err := websocket.DefaultDialer.Dial("wss://www.bitmex.com/realtime", nil)
 	if err != nil {
 		p.Logger.Error(err)
-return
+		return
 	}
 	defer conn.Close()
 
@@ -80,7 +80,7 @@ return
 			Args: []string{channel},
 		}); err != nil {
 			p.Logger.Error(err)
-return
+			return
 		}
 	}
 
