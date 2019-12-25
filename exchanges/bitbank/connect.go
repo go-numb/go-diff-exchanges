@@ -7,13 +7,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/go-numb/go-bitbank/transactions"
+	transaction "github.com/go-numb/go-bitbank/transactions"
 
 	"github.com/buger/jsonparser"
 
 	"gonum.org/v1/gonum/stat"
 
-	"github.com/json-iterator/go"
+	jsoniter "github.com/json-iterator/go"
 
 	"golang.org/x/sync/errgroup"
 
@@ -65,20 +65,20 @@ func (p *Client) Connect() {
 	conn, _, err := websocket.DefaultDialer.Dial("wss://stream.bitbank.cc/socket.io/?EIO=3&transport=websocket", nil)
 	if err != nil {
 		p.Logger.Error(err)
-return
+		return
 	}
 	defer conn.Close()
 
 	channels := []string{"transactions_btc_jpy"}
-	for _, channel := range channels {
+	for i := range channels {
 		if err := conn.WriteMessage(
 			websocket.TextMessage,
 			[]byte(fmt.Sprintf(
 				`42["join-room","%s"]`,
-				channel)),
+				channels[i])),
 		); err != nil {
 			p.Logger.Error(err)
-return
+			return
 		}
 	}
 
@@ -148,10 +148,10 @@ func (p *Client) LTP() (ltp, volume float64) {
 	use := p.E.Executions
 	prices := make([]float64, len(use))
 	volumes := make([]float64, len(use))
-	for i, e := range use {
-		prices[i] = e.Price
-		volumes[i] = e.Amount
-		volume += e.Amount
+	for i := range use {
+		prices[i] = use[i].Price
+		volumes[i] = use[i].Amount
+		volume += use[i].Amount
 	}
 	return stat.Mean(prices, volumes), volume
 }

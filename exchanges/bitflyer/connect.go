@@ -7,7 +7,7 @@ import (
 
 	"gonum.org/v1/gonum/stat"
 
-	"github.com/json-iterator/go"
+	jsoniter "github.com/json-iterator/go"
 
 	"github.com/buger/jsonparser"
 	"github.com/go-numb/go-bitflyer/v1/public/executions"
@@ -60,20 +60,20 @@ func (p *Client) Connect() {
 	conn, _, err := websocket.DefaultDialer.Dial("wss://ws.lightstream.bitflyer.com/json-rpc", nil)
 	if err != nil {
 		p.Logger.Error(err)
-return
+		return
 	}
 	defer conn.Close()
 
 	channels := []string{"lightning_executions_BTC_JPY"}
-	for _, channel := range channels {
+	for i := range channels {
 		if err := conn.WriteMessage(
 			websocket.TextMessage,
 			[]byte(fmt.Sprintf(
 				`{"method": "subscribe", "params": {"channel": "%s"}}`,
-				channel)),
+				channels[i])),
 		); err != nil {
 			p.Logger.Error(err)
-return
+			return
 		}
 	}
 
@@ -123,10 +123,10 @@ func (p *Client) LTP() (ltp, volume float64) {
 	use := p.E.Executions
 	prices := make([]float64, len(use))
 	volumes := make([]float64, len(use))
-	for i, e := range use {
-		prices[i] = e.Price
-		volumes[i] = e.Size
-		volume += e.Size
+	for i := range use {
+		prices[i] = use[i].Price
+		volumes[i] = use[i].Size
+		volume += use[i].Size
 	}
 	return stat.Mean(prices, volumes), volume
 }

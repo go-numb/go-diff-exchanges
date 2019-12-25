@@ -10,7 +10,7 @@ import (
 
 	"gonum.org/v1/gonum/stat"
 
-	"github.com/json-iterator/go"
+	jsoniter "github.com/json-iterator/go"
 
 	"golang.org/x/sync/errgroup"
 
@@ -74,10 +74,10 @@ func (p *Client) Connect() {
 	defer conn.Close()
 
 	channels := []string{"trade:XBTUSD"}
-	for _, channel := range channels {
+	for i := range channels {
 		if err := conn.WriteJSON(&Request{
 			Op:   "subscribe",
-			Args: []string{channel},
+			Args: []string{channels[i]},
 		}); err != nil {
 			p.Logger.Error(err)
 			return
@@ -147,9 +147,9 @@ func (p *Client) LTP() (ltp, volume float64) {
 	use := p.E.Executions
 	prices := make([]float64, len(use))
 	volumes := make([]float64, len(use))
-	for i, e := range use {
-		prices[i] = e.Price
-		btc := float64(e.Size) / e.Price
+	for i := range use {
+		prices[i] = use[i].Price
+		btc := float64(use[i].Size) / use[i].Price
 		volumes[i] = btc
 		volume += btc
 	}

@@ -122,9 +122,9 @@ func (p *Client) LTP() (ltp, volume float64) {
 	use := p.E.Executions
 	prices := make([]float64, len(use))
 	volumes := make([]float64, len(use))
-	for i, e := range use {
-		prices[i], _ = strconv.ParseFloat(e.Price, 64)
-		qty, _ := strconv.ParseFloat(e.Quantity, 64)
+	for i := range use {
+		prices[i], _ = strconv.ParseFloat(use[i].Price, 64)
+		qty, _ := strconv.ParseFloat(use[i].Quantity, 64)
 		volumes[i] = qty
 		volume += qty
 	}

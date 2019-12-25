@@ -6,7 +6,7 @@ import (
 
 	"gonum.org/v1/gonum/stat"
 
-	"github.com/json-iterator/go"
+	jsoniter "github.com/json-iterator/go"
 
 	"github.com/buger/jsonparser"
 
@@ -80,12 +80,12 @@ func (p *Client) Connect() {
 
 	channels := []string{"subscribeTrades"}
 	symbols := []string{"BTCUSD"}
-	for _, channel := range channels {
-		for _, symbol := range symbols {
+	for i := range channels {
+		for j := range symbols {
 			if err := conn.WriteJSON(&Request{
-				Method: channel,
+				Method: channels[i],
 				Params: map[string]interface{}{
-					"symbol": symbol,
+					"symbol": symbols[j],
 					// "limit":  3,
 					// "sort":   "DESC",
 					// "by":     "id",
@@ -149,10 +149,10 @@ func (p *Client) LTP() (ltp, volume float64) {
 	use := p.E.Executions
 	prices := make([]float64, len(use))
 	volumes := make([]float64, len(use))
-	for i, e := range use {
-		prices[i] = e.Price
-		volumes[i] = e.Quantity
-		volume += e.Quantity
+	for i := range use {
+		prices[i] = use[i].Price
+		volumes[i] = use[i].Quantity
+		volume += use[i].Quantity
 	}
 	return stat.Mean(prices, volumes), volume
 }

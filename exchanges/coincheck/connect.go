@@ -85,11 +85,11 @@ return
 	defer conn.Close()
 
 	channels := []string{"btc_jpy-trades"} //, "eth_jpy-trades", "xrp_jpy-trades"} //, "btc_jpy-orderbook"}
-	for _, channel := range channels {
+	for i := range channels {
 		if err := conn.WriteJSON(
 			&JSONRPC2{
 				Type:    "subscribe",
-				Channel: channel,
+				Channel: channels[i],
 			},
 		); err != nil {
 			p.Logger.Error(err)
@@ -178,10 +178,10 @@ func (p *Client) LTP() (ltp, volume float64) {
 	use := p.E.Executions
 	prices := make([]float64, len(use))
 	volumes := make([]float64, len(use))
-	for i, e := range use {
-		prices[i] = e.Price
-		volumes[i] = e.Size
-		volume += e.Size
+	for i := range use {
+		prices[i] = use[i].Price
+		volumes[i] = use[i].Size
+		volume += use[i].Size
 	}
 	return stat.Mean(prices, volumes), volume
 }

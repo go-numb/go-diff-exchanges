@@ -86,12 +86,12 @@ return
 
 	channels := []string{"trades"}
 	symbols := []string{"BTC/USD", "BTC-PERP"}
-	for _, channel := range channels {
-		for _, symbol := range symbols {
+	for i := range channels {
+		for j := range symbols {
 			if err := conn.WriteJSON(&Request{
 				Op:      "subscribe",
-				Channel: channel,
-				Market:  symbol,
+				Channel: channels[i],
+				Market:  symbols[j],
 			}); err != nil {
 				p.Logger.Error(err)
 return
@@ -164,10 +164,10 @@ func (p *Client) LTP() (ltp, volume float64) {
 	use := p.E.Executions
 	prices := make([]float64, len(use))
 	volumes := make([]float64, len(use))
-	for i, e := range use {
-		prices[i] = e.Price
-		volumes[i] = e.Size
-		volume += e.Size
+	for i := range use {
+		prices[i] = use[i].Price
+		volumes[i] = use[i].Size
+		volume += use[i].Size
 	}
 	return stat.Mean(prices, volumes), volume
 }

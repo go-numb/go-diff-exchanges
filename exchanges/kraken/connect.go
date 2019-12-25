@@ -11,7 +11,7 @@ import (
 
 	"gonum.org/v1/gonum/stat"
 
-	"github.com/json-iterator/go"
+	jsoniter "github.com/json-iterator/go"
 
 	"golang.org/x/sync/errgroup"
 
@@ -88,12 +88,12 @@ func (p *Client) Connect() {
 
 	channels := []string{"trade"}
 	symbols := []string{"BTC/USD"}
-	for _, channel := range channels {
+	for i := range channels {
 		if err := conn.WriteJSON(&Request{
 			Event: "subscribe",
 			Pair:  symbols,
 			Subscription: map[string]string{
-				"name": channel,
+				"name": channels[i],
 			},
 		}); err != nil {
 			p.Logger.Error(err)
@@ -169,10 +169,10 @@ func (p *Client) LTP() (ltp, volume float64) {
 	use := p.E.Executions
 	prices := make([]float64, len(use))
 	volumes := make([]float64, len(use))
-	for i, e := range use {
-		prices[i] = e.Price
-		volumes[i] = e.Size
-		volume += e.Size
+	for i := range use {
+		prices[i] = use[i].Price
+		volumes[i] = use[i].Size
+		volume += use[i].Size
 	}
 	return stat.Mean(prices, volumes), volume
 }
@@ -233,23 +233,23 @@ func (p *E) set(b []byte) error {
 			return
 		}
 
-		for _, v := range str {
+		for i := range str {
 			var (
 				price float64
 				size  float64
 			)
-			temp, err := strconv.ParseFloat(v[0], 64)
+			temp, err := strconv.ParseFloat(str[i][0], 64)
 			if err != nil {
 				continue
 			}
 			price = temp
-			temp, err = strconv.ParseFloat(v[1], 64)
+			temp, err = strconv.ParseFloat(str[i][1], 64)
 			if err != nil {
 				continue
 			}
 			size = temp
 
-			temp, err = strconv.ParseFloat(v[2], 64)
+			temp, err = strconv.ParseFloat(str[i][2], 64)
 			if err != nil {
 				continue
 			}
@@ -258,10 +258,10 @@ func (p *E) set(b []byte) error {
 			t := time.Unix(int64(sec), fint)
 
 			ex = append(ex, Execution{
-				OrderType: v[4],
+				OrderType: str[i][4],
 				Price:     price,
 				Size:      size,
-				Side:      v[3],
+				Side:      str[i][3],
 				Time:      t,
 			})
 		}

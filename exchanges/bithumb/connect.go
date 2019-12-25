@@ -11,7 +11,7 @@ import (
 
 	"gonum.org/v1/gonum/stat"
 
-	"github.com/json-iterator/go"
+	jsoniter "github.com/json-iterator/go"
 
 	"golang.org/x/sync/errgroup"
 
@@ -82,16 +82,16 @@ func (p *Client) Connect() {
 	conn, _, err := websocket.DefaultDialer.Dial("wss://global-api.bithumb.pro/message/realtime", nil)
 	if err != nil {
 		p.Logger.Error(err)
-return
+		return
 	}
 	defer conn.Close()
 
 	channels := []string{"TRADE"}
 	symbols := []string{"BTC-USDT"}
 	var args []string
-	for _, channel := range channels {
-		for _, symbol := range symbols {
-			args = append(args, fmt.Sprintf("%s:%s", channel, symbol))
+	for i := range channels {
+		for j := range symbols {
+			args = append(args, fmt.Sprintf("%s:%s", channels[i], symbols[j]))
 		}
 	}
 
@@ -100,7 +100,7 @@ return
 		Args:    args,
 	}); err != nil {
 		p.Logger.Error(err)
-return
+		return
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -171,10 +171,10 @@ func (p *Client) LTP() (ltp, volume float64) {
 	use := p.E.Executions
 	prices := make([]float64, len(use))
 	volumes := make([]float64, len(use))
-	for i, e := range use {
-		prices[i] = e.Price
-		volumes[i] = e.Size
-		volume += e.Size
+	for i := range use {
+		prices[i] = use[i].Price
+		volumes[i] = use[i].Size
+		volume += use[i].Size
 	}
 	return stat.Mean(prices, volumes), volume
 }
