@@ -40,6 +40,9 @@ import (
 )
 
 const (
+	// DATABASENAME is influxDB
+	DATABASENAME = "testdata"
+
 	// TERM n秒足設定
 	TERM = 500 * time.Millisecond
 
@@ -242,7 +245,7 @@ func toPrice(x float64) string {
 
 func (p *Client) save(name string, e Exchange) {
 	bp, err := infv2.NewBatchPoints(infv2.BatchPointsConfig{
-		Database:  "testdata",
+		Database:  DATABASENAME,
 		Precision: "s",
 	})
 	if err != nil {
